@@ -15,11 +15,11 @@ export class Modal {
     }
 
     init(e:any = null) {
-        this.$el.find('#close').click((e) => {
+        this.$el.find('.close').click((e) => {
             e.preventDefault();
             this.hide();
         });
-        this.$el.find('#next,#previous').click((e) => {
+        this.$el.find('.next,.previous').click((e) => {
             var direction = $(this).attr('id');
             e.preventDefault();
             this.gallery.handleNextPrev(direction);
@@ -35,25 +35,25 @@ export class Modal {
     }
 
     setContent(content, hasprev, hasnext) {
-        this.$el.find('#content').html(content);
+        this.$el.find('.content').html(content);
 
         if (hasprev) {
-            this.$el.find('#previous').show();
+            this.$el.find('.previous').show();
         }
         else {
-            this.$el.find('#previous').hide();
+            this.$el.find('.previous').hide();
         }
 
         if (hasnext) {
-            this.$el.find('#next').show();
+            this.$el.find('.next').show();
         }
         else {
-            this.$el.find('#next').hide();
+            this.$el.find('.next').hide();
         }
     }
 
     setHeading(heading) {
-        this.$el.find('#heading').text(heading);
+        this.$el.find('.heading').text(heading);
     }
 }
 
@@ -61,11 +61,7 @@ export class Gallery {
 
     api_url:string;
     items_per_page:number;
-    group_template:any;
-    item_template:any;
-    item_template_source:any;
     compiled_item_template:any;
-    group_template_source:any;
     compiled_group_template:any;
     $pagination:any;
     $container:any;
@@ -73,24 +69,22 @@ export class Gallery {
     types:any[];
     modal:Modal;
 
-    constructor($container) {
+    constructor($container, group:string = "#gallery-group-template", item:string="#gallery-item-template") {
         this.api_url = window.location.pathname + '/gallery.json';
         this.items_per_page = 1;
-        this.group_template = 'gallery-group-template';
-        this.item_template = 'gallery-item-template';
 
-        this.item_template_source = $('#' + this.item_template).html();
-        this.compiled_item_template = handlebars.compile(this.item_template_source);
-        this.group_template_source = $('#' + this.group_template).html();
-        this.compiled_group_template = handlebars.compile(this.group_template_source);
+        var item_template_source = $(item).html();
+        var group_template_source = $(group).html();
+        this.compiled_item_template = handlebars.compile(item_template_source);
+        this.compiled_group_template = handlebars.compile(group_template_source);
 
-        this.$pagination = $container.find('#pagination');
+        this.$pagination = $container.find('.pagination');
         this.$container = $container;
 
         this.category = [];
         this.types = [];
 
-        this.modal = new Modal(this, $container.find('#modal'));
+        this.modal = new Modal(this, $container.find('.modal'));
 
         this.setupControls();
         this.update();
@@ -143,17 +137,20 @@ export class Gallery {
     callback(data) {
 
         // Cleanup
-        $('#groups', this.$container).empty();
+        $('.groups', this.$container).empty();
         this.$pagination.empty();
 
         // Append our new items
-        var groups = (function (items, size) {
+        var groups = ((items, size) => {
             var groups = [];
-            while (items.length > 0) {
-                groups.push(items.splice(0, size));
+            if (items && items.length) {
+                while (items.length > 0) {
+                    groups.push(items.splice(0, size));
+                }
+                return groups;
             }
-            return groups;
-        }(data.items, this.items_per_page));
+            return [];
+        })(data.items, this.items_per_page);
 
         $.each(groups, (group_index, group) => {
             var data = '';
@@ -164,7 +161,7 @@ export class Gallery {
             });
 
             var group_html = this.compiled_group_template({'data': data});
-            $('#groups', this.$container).append(group_html);
+            $('.groups', this.$container).append(group_html);
         });
 
         // Setup pagination
@@ -172,7 +169,7 @@ export class Gallery {
             var i = $(this).data('i');
             e.preventDefault();
 
-            $('.state-current', $(this).closest('#pagination')).removeClass('state-current');
+            $('.state-current', $(this).closest('.pagination')).removeClass('state-current');
             $(this).parent().addClass('state-current');
 
             $('.group.state-current', this.$container).removeClass('state-current');
@@ -213,7 +210,7 @@ export class Gallery {
 
     handleExpand() {
         var that = this;
-        var $modal = this.$container.find('#modal');
+        var $modal = this.$container.find('.modal');
         $('a.expand', this.$container).click(function (e) {
             e.preventDefault();
             that.setActive($(this).parent());

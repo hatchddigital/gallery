@@ -11,20 +11,65 @@
         Gallery
     </h1>
 
+    <script id="gallery-group-template" type="text/x-handlebars-template">
+        <ul class="group">
+            {{{data}}}
+        </ul>
+    </script>
+
+    <script id="gallery-item-template" type="text/x-handlebars-template">
+        <li class="gallery-item"
+            data-type="{{type}}"
+            data-youtube-id="{{youtube_id}}"
+            data-image-large="{{image_scales.large}}"
+            data-page="{{page}}"
+            data-item-index="{{item_index}}">
+            <img src="{{image_scales.thumb}}" alt="{{image_alt}}" />
+            </a>
+            <div class="gallery-item-full">
+                <div class="description">
+                    <div class="expanded-media"></div>
+                    <p>
+                        {{description}}
+                    </p>
+                    <p>Credit: {{media_credit}}</p>
+                </div>
+            </div>
+        </li>
+    </script>
+
+    <div id="gallery" class="gallery">
+        <div class="groups">
+        </div>
+        <ul class="pagination">
+        </ul>
+        <div class="modal">
+            <div class="blocking"></div>
+            <div class="container">
+                <div class="heading">x of x</div>
+                <div class="content"></div>
+                <a class="close" href="#"></a>
+                <a class="previous" href="#"></a>
+                <a class="next" href="#"></a>
+            </div>
+        </div>
+    </div>
+
     <script src="libs/requirejs/require.js"></script>
     <script>
         require.config({
           paths: {
             'jquery': 'libs/jquery/dist/jquery',
             'handlebars': 'libs/handlebars/handlebars',
-            'gallery': '../dist/gallery.min'
+            'gallery': '../dist/gallery'
           },
           shim: {
             'handlebars': { exports: 'Handlebars' }
           }
         });
-        require(['gallery'], function(gallery) {
-            console.log(gallery);
+        require(['jquery', 'gallery'], function($, gallery) {
+            var gallery = new gallery.Gallery($('#gallery'));
+            gallery.modal.show();
         });
     </script>
 </body>

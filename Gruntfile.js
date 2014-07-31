@@ -16,7 +16,7 @@ module.exports = function (grunt) {
         clean: {
             dist: ['<%= path.dist %>/*']
         }
-    })
+    });
 
     // Typescript source compile
     ext.configure({
@@ -37,12 +37,12 @@ module.exports = function (grunt) {
         watch: {
             scripts: {
                 files: ['<%= path.src %>/**/*.ts'],
-                tasks: ['scripts'],
+                tasks: ['build'],
                 options: { spawn: true }
             }
         }
     });
-    ext.registerTask('scripts', ['typescript:scripts'])
+    ext.registerTask('scripts', ['typescript:scripts']);
 
     // Sass source compile
     ext.configure({
@@ -56,12 +56,12 @@ module.exports = function (grunt) {
         watch: {
             styles: {
                 files: ['<%= path.src %>/**/*.scss'],
-                tasks: ['styles'],
+                tasks: ['build'],
                 options: { spawn: true }
             }
         }
     });
-    ext.registerTask('styles', ['sass:styles'])
+    ext.registerTask('styles', ['sass:styles']);
 
     // Build tasks for release
     ext.configure({
@@ -71,9 +71,16 @@ module.exports = function (grunt) {
                     '<%= path.dist %>/gallery.min.js': ['<%= path.build %>/gallery.js']
                 }
             }
+        },
+        copy: {
+            build: {
+                files: {
+                    '<%= path.dist %>/gallery.js': ['<%= path.build %>/gallery.js']
+                }
+            }
         }
     });
-    ext.registerTask('build', ['scripts', 'styles', 'uglify:build'])
+    ext.registerTask('build', ['scripts', 'styles', 'copy:build', 'uglify:build']);
 
     // Local tests
     ext.configure({
@@ -86,7 +93,7 @@ module.exports = function (grunt) {
             }
         }
     });
-    ext.registerTask('server', ['connect:gallery', 'watch'])
+    ext.registerTask('server', ['connect:gallery', 'watch']);
 
     ext.initConfig(grunt);
     grunt.registerTask('default', ['clean', 'build']);
