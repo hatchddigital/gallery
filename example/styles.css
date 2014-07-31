@@ -1,0 +1,41 @@
+body{
+    background:#EF4136;
+    color:#222;
+    font-size:18px;
+}
+h1{
+    font-size:2em;
+    text-decoration:underline;
+}
+h2{
+    font-size:1.5em;
+}
+.wrapper{
+    max-width:800px;
+    margin:0 auto;
+    background:#eee;
+    padding:20px;
+    font-family:Helvetica,sans-serif;
+}
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+.clearfix {
+    display: inline-block;
+}
+/* Start commented backslash hack \*/
+* html .clearfix {
+    height: 1%;
+}
+.clearfix {
+    display: block;
+}
+.hide,
+.state-hide{
+    display:none;
+}

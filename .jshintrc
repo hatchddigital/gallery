@@ -1,0 +1,9 @@
+{
+    "camelcase": false,
+    "globals": {
+        "require": true,
+        "define": true,
+        "window": true,
+        "document": true
+    }
+}
