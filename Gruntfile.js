@@ -49,7 +49,10 @@ module.exports = function (grunt) {
         sass: {
             styles: {
                 files: {
-                    '<%= path.dist %>/gallery.css': ['<%= path.src %>/gallery.scss']
+                    expand: true,
+                    src: ['<%= path.src %>/*.scss'],
+                    dest: '<%= path.dist %>',
+                    ext: '.css'
                 }
             }
         },

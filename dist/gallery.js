@@ -1,4 +1,5 @@
 define(["require", "exports", 'jquery', 'handlebars'], function(require, exports, $, handlebars) {
+    /** A modal popup helper */
     var Modal = (function () {
         function Modal(gallery, $el) {
             this.$el = $el;
