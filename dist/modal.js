@@ -1,29 +1,31 @@
 define(["require", "exports", 'jquery'], function(require, exports, $) {
-    
-
     /** A modal popup helper */
     var Modal = (function () {
-        function Modal($el, inner) {
-            if (typeof inner === "undefined") { inner = null; }
+        function Modal($el, gallery) {
+            if (typeof gallery === "undefined") { gallery = null; }
             this.$el = $el;
-            this.inner = inner;
+            this.gallery = gallery;
             this.init();
         }
-        Modal.prototype.init = function (e) {
+        Modal.prototype.init = function () {
             var _this = this;
-            if (typeof e === "undefined") { e = null; }
-            console.log("Found: ", this.$el);
             this.$el.find('.close').click(function (e) {
                 e.preventDefault();
-                _this.hide();
+                _this.close();
             });
-            this.$el.find('.next,.previous').click(function (e) {
-                var direction = $(_this).attr('id');
+            this.$el.find('.blocking').click(function (e) {
                 e.preventDefault();
-                if (_this.inner) {
-                    _this.inner.handleNextPrev(direction);
-                }
+                _this.close();
             });
+            if (this.gallery) {
+                this.$el.find('.next, .previous').click(function (e) {
+                    var direction = $(e.target).data('direction');
+                    e.preventDefault();
+                    _this.gallery.handleNextPrev(direction);
+                });
+            } else {
+                this.$el.find('.next, .previous').remove();
+            }
         };
 
         Modal.prototype.show = function (e) {
@@ -31,21 +33,21 @@ define(["require", "exports", 'jquery'], function(require, exports, $) {
             this.$el.addClass('state-active');
         };
 
-        Modal.prototype.hide = function (e) {
+        Modal.prototype.close = function (e) {
             if (typeof e === "undefined") { e = null; }
             this.$el.removeClass('state-active');
         };
 
-        Modal.prototype.setContent = function (content, hasprev, hasnext) {
+        Modal.prototype.setContent = function (content, hasPrev, hasNext) {
             this.$el.find('.content').html(content);
 
-            if (hasprev) {
+            if (hasPrev) {
                 this.$el.find('.previous').show();
             } else {
                 this.$el.find('.previous').hide();
             }
 
-            if (hasnext) {
+            if (hasNext) {
                 this.$el.find('.next').show();
             } else {
                 this.$el.find('.next').hide();

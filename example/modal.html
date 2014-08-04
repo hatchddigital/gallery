@@ -13,8 +13,6 @@
           <div class="heading">x of x</div>
           <div class="content"></div>
           <a class="close" href="#"></a>
-          <a class="previous" href="#"></a>
-          <a class="next" href="#"></a>
       </div>
     </div>
     <div>
@@ -99,6 +97,8 @@
         });
         require(['jquery', 'modal'], function($, modal) {
             var m = new modal.Modal($('.target'));
+            m.setContent('Hello world');
+            m.setHeading('Hello heading');
             m.show();
         });
     </script>

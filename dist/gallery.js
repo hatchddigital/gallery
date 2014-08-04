@@ -1,85 +1,47 @@
 define(["require", "exports", 'jquery', 'handlebars', './modal'], function(require, exports, $, handlebars, modal) {
     var Gallery = (function () {
-        function Gallery($container, overrides) {
-            if (typeof overrides === "undefined") { overrides = null; }
-            var config = {
-                group_template_selector: "#gallery-group-template",
-                item_template_selector: "#gallery-item-template",
-                api_url: window.location.pathname + '/gallery.json',
-                items_per_page: 1,
-                pagination_selector: '.pagination',
-                modal_selector: '.modal'
-            };
+        function Gallery($container, settings) {
+            if (typeof settings === "undefined") { settings = {}; }
+            this.$container = $container;
+            this.$pagination = $container.find('.pagination');
 
-            if (config) {
-                for (var key in overrides) {
-                    config[key] = overrides[key];
-                }
-            }
+            this.api_url = settings.api_url || window.location.pathname + '/gallery.json';
+            this.data = settings.data || null;
+            this.api_params = {};
+            this.items_per_page = parseInt(settings.items_per_page || 2, 10);
 
-            this.config = config;
+            var item_template = settings.item_template || '#gallery-item-template';
+            var group_template = settings.group_template || '#gallery-group-template';
+            var item_template_source = $(item_template).html();
+            var group_template_source = $(group_template).html();
 
-            var item_template_source = $(config.item_template_selector).html();
-            var group_template_source = $(config.group_template_selector).html();
             this.compiled_item_template = handlebars.compile(item_template_source);
             this.compiled_group_template = handlebars.compile(group_template_source);
-
-            this.$pagination = $container.find(this.config.pagination_selector);
-            this.$container = $container;
 
             this.category = [];
             this.types = [];
 
-            this.modal = new modal.Modal($container.find(this.config.modal_selector), this);
-
-            this.setupControls();
+            this.modal = new modal.Modal($container.find('.modal'), this);
+            this.beforeInit();
             this.update();
+            this.afterInit();
         }
-        Gallery.prototype.update = function () {
-            var _this = this;
-            var params = {};
-            params.category = this.category;
-            params.types = this.types;
-            $.getJSON(this.config.api_url, params, function (data) {
-                _this.callback(data);
-            });
+        Gallery.prototype.beforeInit = function () {
+            // override
+        };
+        Gallery.prototype.afterInit = function () {
+            // override
         };
 
-        Gallery.prototype.setupControls = function (e) {
+        Gallery.prototype.update = function () {
             var _this = this;
-            if (typeof e === "undefined") { e = null; }
-            var typeChangeCallback = function () {
-                var types = [];
-                $('.filter--types a.state-active').each(function () {
-                    types.push($(this).data('type'));
+            if (this.data) {
+                this.callback(this.data);
+            } else {
+                $.getJSON(this.api_url, this.api_params, function (data) {
+                    _this.callback(data);
                 });
-                _this.types = types;
-
-                if (!types.length) {
-                    $('.filter--types a').addClass('state-active');
-                }
-            };
-
-            var categoryChangeCallback = function () {
-                _this.category = $('.filter--category a.state-active').data('category') || null;
-            };
-
-            $('.filter--category a').click(function (e) {
-                e.preventDefault();
-                $('.filter--category a.state-active').removeClass('state-active');
-                $(this).addClass('state-active');
-                categoryChangeCallback();
-                this.update();
-            });
-            categoryChangeCallback();
-
-            $('.filter--types a').click(function (e) {
-                e.preventDefault();
-                $(this).toggleClass('state-active');
-                typeChangeCallback();
-                this.update();
-            });
-            typeChangeCallback();
+            }
         };
 
         Gallery.prototype.callback = function (data) {
@@ -98,14 +60,17 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
                     return groups;
                 }
                 return [];
-            })(data.items, this.config.items_per_page);
+            })(data.items, this.items_per_page);
 
+            var item_index = 1;
             $.each(groups, function (group_index, group) {
                 var data = '';
                 $.each(group, function (index, item) {
                     item.page = group_index + 1;
+                    item.item_index = item_index;
                     var item_html = _this.compiled_item_template(item);
                     data += item_html;
+                    item_index = item_index + 1;
                 });
 
                 var group_html = _this.compiled_group_template({ 'data': data });
@@ -114,18 +79,16 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
 
             // Setup pagination
             var pagination_click_callback = function (e) {
-                var $target = $(e.target);
-                var i = parseInt($target.closest('a').attr('data-i'));
+                var $pageEl = $(e.currentTarget);
+                var i = $pageEl.data('i');
                 e.preventDefault();
 
-                $(_this.$container).find('.state-current').removeClass('state-current');
-                $target.closest('a').parent().addClass('state-current');
+                $('.state-current', $pageEl.closest('.pagination')).removeClass('state-current');
+                $pageEl.parent().addClass('state-current');
 
-                var group = _this.$container.find('.group')[i - 1];
-                $(group).addClass('state-current');
+                $('.group.state-current', _this.$container).removeClass('state-current');
+                $($('.group', _this.$container)[i - 1]).addClass('state-current');
             };
-
-            // Setup content
             var group_elements = this.$container.find('.group');
             $(group_elements[0]).first().addClass('state-current');
             for (var i = 1; i <= group_elements.length; i++) {
@@ -144,6 +107,7 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
         };
 
         Gallery.prototype.setPage = function (i) {
+            console.log('set page to ' + i);
             this.$pagination.find('a')[i - 1].click();
         };
 
@@ -161,7 +125,6 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
 
         Gallery.prototype.handleExpand = function () {
             var that = this;
-            var $modal = this.$container.find('.modal');
             $('a.expand', this.$container).click(function (e) {
                 e.preventDefault();
                 that.setActive($(this).parent());
@@ -191,10 +154,14 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
         };
 
         Gallery.prototype.setActive = function ($el) {
-            var hasprev;
-            var hasnext;
+            var hasPrev;
+            var hasNext;
             var $content = $el.find('.gallery-item-full').clone();
             var currentPageNumber = this.getCurrentPageNumber();
+
+            console.log($el);
+            console.log(currentPageNumber);
+            console.log($el.data('page'));
 
             // If the current page is not that of the element's, switch to that page
             if (currentPageNumber !== $el.data('page')) {
@@ -202,23 +169,23 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
             }
 
             // Run this after the page has been adjusted.
-            hasprev = this.findPrevItem($el).length > 0;
-            hasnext = this.findNextItem($el).length > 0;
+            hasPrev = this.findPrevItem($el).length > 0;
+            hasNext = this.findNextItem($el).length > 0;
 
             // Set the active gallery item
             this.$container.find('.gallery-item.state-active').removeClass('state-active');
             $el.addClass('state-active');
 
             // Swap out the enlarged media
-            if ($el.data('type') === 'Image') {
-                $content.find('.expanded-media').append('<img src="' + $el.data('image-large') + ' alt="' + $el.find('.expand img').attr('alt') + '">');
+            if (!$el.data('youtube-id')) {
+                $content.find('.expanded-media').append('<img src="' + $el.data('image-large') + '" alt="' + $el.find('.expand img').attr('alt') + '">');
             } else {
                 $content.find('.expanded-media').append('<iframe width="100%" height="400" src="//www.youtube.com/embed/' + $el.data('youtube-id') + '" frameborder="0" allowfullscreen="allowfullscreen"></iframe>');
             }
 
             // Update the modal dialog
-            this.modal.setContent($content, hasprev, hasnext);
-            this.modal.setHeading(($el.index() + 1) + ' of ' + this.$container.find('.gallery-item').length);
+            this.modal.setContent($content, hasPrev, hasNext);
+            this.modal.setHeading($el.data('item-index') + ' of ' + this.$container.find('.gallery-item').length);
             this.modal.show();
         };
 

@@ -24,7 +24,8 @@
             data-image-large="{{image_scales.large}}"
             data-page="{{page}}"
             data-item-index="{{item_index}}">
-            <img src="{{image_scales.thumb}}" alt="{{image_alt}}" />
+            <a href="#" class="expand">
+                <img src="{{image_scales.thumb}}" alt="{{image_alt}}" />
             </a>
             <div class="gallery-item-full">
                 <div class="description">
@@ -39,19 +40,18 @@
     </script>
 
     <div id="gallery" class="gallery">
+        <div class="groups">
+        </div>
+        <ul class="pagination">
+        </ul>
         <div class="modal">
             <div class="blocking"></div>
             <div class="container">
                 <div class="heading">x of x</div>
-                <div class="content">
-                  <div class="groups">
-                  </div>
-                  <ul class="pagination">
-                  </ul>
-                </div>
+                <div class="content"></div>
                 <a class="close" href="#"></a>
-                <a class="previous" href="#"></a>
-                <a class="next" href="#"></a>
+                <a class="previous" data-direction="previous" href="#"></a>
+                <a class="next" data-direction="next" href="#"></a>
             </div>
         </div>
     </div>
@@ -69,9 +69,61 @@
             'handlebars': { exports: 'Handlebars' }
           }
         });
+        var data = { "items": [
+            {
+                "type": "image",
+                "youtube_id": null,
+                "image_scales": {
+                    "large": "img/a.jpg",
+                    "thumb": "img/b.jpg"
+                },
+                "description": "Hello 1",
+                "media_credit": "Credit 1"
+            },
+            {
+                "type": "image",
+                "youtube_id": null,
+                "image_scales": {
+                    "large": "img/a.jpg",
+                    "thumb": "img/b.jpg"
+                },
+                "description": "Hello 2",
+                "media_credit": "Credit 2"
+            },
+            {
+                "type": "image",
+                "youtube_id": null,
+                "image_scales": {
+                    "large": "img/a.jpg",
+                    "thumb": "img/b.jpg"
+                },
+                "description": "Hello 3",
+                "media_credit": "Credit 3"
+            },
+            {
+                "type": "image",
+                "youtube_id": null,
+                "image_scales": {
+                    "large": "img/a.jpg",
+                    "thumb": "img/b.jpg"
+                },
+                "description": "Hello 4",
+                "media_credit": "Credit 4"
+            },
+            {
+                "type": "image",
+                "youtube_id": null,
+                "image_scales": {
+                    "large": "img/a.jpg",
+                    "thumb": "img/b.jpg"
+                },
+                "description": "Hello",
+                "media_credit": "Credit"
+            }
+        ]}
+
         require(['jquery', 'gallery'], function($, gallery) {
-            var gallery = new gallery.Gallery($('#gallery'), { api_url: "gallery.json" });
-            gallery.modal.show();
+            var gallery = new gallery.Gallery($('#gallery'), {data: data});
         });
     </script>
 </body>

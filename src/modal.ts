@@ -3,57 +3,58 @@
 import $ = require('jquery');
 import handlebars = require('handlebars');
 
-/** Pagination interface */
-export interface HasNextPrev {
-  handleNextPrev(direction:string);
-}
-
 /** A modal popup helper */
 export class Modal {
 
     $el:any;
-    inner:HasNextPrev;
+    gallery:any;
 
-    constructor($el, inner:HasNextPrev = null) {
+    constructor($el, gallery:any = null) {
         this.$el = $el;
-        this.inner = inner;
+        this.gallery = gallery;
         this.init();
     }
 
-    init(e:any = null) {
-        console.log("Found: ", this.$el);
+    init() {
         this.$el.find('.close').click((e) => {
             e.preventDefault();
-            this.hide();
+            this.close();
         });
-        this.$el.find('.next,.previous').click((e) => {
-            var direction = $(this).attr('id');
+        this.$el.find('.blocking').click((e) => {
             e.preventDefault();
-            if (this.inner) {
-              this.inner.handleNextPrev(direction);
-            }
+            this.close();
         });
+        if (this.gallery) {
+            this.$el.find('.next, .previous').click((e) => {
+                var direction = $(e.target).data('direction');
+                e.preventDefault();
+                this.gallery.handleNextPrev(direction);
+            });
+        }
+        else {
+            this.$el.find('.next, .previous').hide();
+        }
     }
 
     show(e:any = null) {
         this.$el.addClass('state-active');
     }
 
-    hide(e:any = null) {
+    close(e:any = null) {
         this.$el.removeClass('state-active');
     }
 
-    setContent(content, hasprev, hasnext) {
+    setContent(content, hasPrev, hasNext) {
         this.$el.find('.content').html(content);
 
-        if (hasprev) {
+        if (hasPrev) {
             this.$el.find('.previous').show();
         }
         else {
             this.$el.find('.previous').hide();
         }
 
-        if (hasnext) {
+        if (hasNext) {
             this.$el.find('.next').show();
         }
         else {
