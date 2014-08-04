@@ -3,15 +3,20 @@
 import $ = require('jquery');
 import handlebars = require('handlebars');
 
+/** Pagination interface */
+export interface HasNextPrev {
+  handleNextPrev(direction:string);
+}
+
 /** A modal popup helper */
 export class Modal {
 
     $el:any;
-    gallery:Gallery;
+    inner:HasNextPrev;
 
-    constructor(gallery:Gallery, $el) {
+    constructor($el, inner:HasNextPrev = null) {
         this.$el = $el;
-        this.gallery = gallery;
+        this.inner = inner;
         this.init();
     }
 
@@ -23,7 +28,9 @@ export class Modal {
         this.$el.find('.next,.previous').click((e) => {
             var direction = $(this).attr('id');
             e.preventDefault();
-            this.gallery.handleNextPrev(direction);
+            if (this.inner) {
+              this.inner.handleNextPrev(direction);
+            }
         });
     }
 

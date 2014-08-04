@@ -4,13 +4,91 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width,user-scalable=no, scale=1, maximum-scale=1.0" />
     <title>Hatchling: Gallery</title>
-	<link rel="stylesheet" href="../dist/gallery.css" media="screen" />
+	<link rel="stylesheet" href="../dist/modal.css" media="screen" />
 </head>
 <body>
-    <h1>
-        Modal
-    </h1>
-
+    <div class="modal target">
+      <div class="blocking"></div>
+      <div class="container" style="width: 50%; height: 50%;">
+          <div class="heading">x of x</div>
+          <div class="content"></div>
+          <a class="close" href="#"></a>
+          <a class="previous" href="#"></a>
+          <a class="next" href="#"></a>
+      </div>
+    </div>
+    <div>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+      A really long page goes here <br/>
+    </div>
     <script src="libs/requirejs/require.js"></script>
     <script>
         require.config({
@@ -19,9 +97,9 @@
             'modal': '../dist/modal'
           }
         });
-        require(['jquery', 'modal'], function($, gallery) {
-            var modal = new modal.Modal($('#gallery'));
-            gallery.modal.show();
+        require(['jquery', 'modal'], function($, modal) {
+            var m = new modal.Modal($('.target'));
+            m.show();
         });
     </script>
 </body>

@@ -14,7 +14,7 @@ export class Gallery {
     $container:any;
     category:any[];
     types:any[];
-    modal:model.Modal;
+    modal:modal.Modal;
 
     constructor($container, group:string = "#gallery-group-template", item:string="#gallery-item-template") {
         this.api_url = window.location.pathname + '/gallery.json';

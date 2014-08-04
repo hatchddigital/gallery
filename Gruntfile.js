@@ -48,12 +48,13 @@ module.exports = function (grunt) {
     ext.configure({
         sass: {
             styles: {
-                files: {
+                files: [{
+                    cwd: '<%= path.src %>',
                     expand: true,
-                    src: ['<%= path.src %>/*.scss'],
+                    src: ['*.scss'],
                     dest: '<%= path.dist %>',
                     ext: '.css'
-                }
+                }]
             }
         },
         watch: {
@@ -71,14 +72,16 @@ module.exports = function (grunt) {
         uglify: {
             build: {
                 files: {
-                    '<%= path.dist %>/gallery.min.js': ['<%= path.build %>/gallery.js']
+                    '<%= path.dist %>/gallery.min.js': ['<%= path.build %>/gallery.js'],
+                    '<%= path.dist %>/modal.min.js': ['<%= path.build %>/modal.js']
                 }
             }
         },
         copy: {
             build: {
                 files: {
-                    '<%= path.dist %>/gallery.js': ['<%= path.build %>/gallery.js']
+                    '<%= path.dist %>/gallery.js': ['<%= path.build %>/gallery.js'],
+                    '<%= path.dist %>/modal.js': ['<%= path.build %>/modal.js'],
                 }
             }
         }
