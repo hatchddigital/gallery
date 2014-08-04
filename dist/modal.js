@@ -12,6 +12,7 @@ define(["require", "exports", 'jquery'], function(require, exports, $) {
         Modal.prototype.init = function (e) {
             var _this = this;
             if (typeof e === "undefined") { e = null; }
+            console.log("Found: ", this.$el);
             this.$el.find('.close').click(function (e) {
                 e.preventDefault();
                 _this.hide();

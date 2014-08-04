@@ -4,10 +4,18 @@ import $ = require('jquery');
 import handlebars = require('handlebars');
 import modal = require('./modal');
 
+export interface GalleryConfig {
+  modal_selector:string;
+  pagination_selector:string;
+  group_template_selector:string;
+  item_template_selector:string;
+  items_per_page:number;
+  api_url:string;
+}
+
 export class Gallery {
 
-    api_url:string;
-    items_per_page:number;
+    config:GalleryConfig;
     compiled_item_template:any;
     compiled_group_template:any;
     $pagination:any;
@@ -16,22 +24,37 @@ export class Gallery {
     types:any[];
     modal:modal.Modal;
 
-    constructor($container, group:string = "#gallery-group-template", item:string="#gallery-item-template") {
-        this.api_url = window.location.pathname + '/gallery.json';
-        this.items_per_page = 1;
+    constructor($container, overrides:GalleryConfig = null) {
 
-        var item_template_source = $(item).html();
-        var group_template_source = $(group).html();
+        var config:GalleryConfig = {
+          group_template_selector: "#gallery-group-template",
+          item_template_selector: "#gallery-item-template",
+          api_url: window.location.pathname + '/gallery.json',
+          items_per_page: 1,
+          pagination_selector: '.pagination',
+          modal_selector: '.modal'
+        };
+
+        if (config) {
+          for (var key in overrides) {
+            config[key] = overrides[key];
+          }
+        }
+
+        this.config = config;
+
+        var item_template_source = $(config.item_template_selector).html();
+        var group_template_source = $(config.group_template_selector).html();
         this.compiled_item_template = handlebars.compile(item_template_source);
         this.compiled_group_template = handlebars.compile(group_template_source);
 
-        this.$pagination = $container.find('.pagination');
+        this.$pagination = $container.find(this.config.pagination_selector);
         this.$container = $container;
 
         this.category = [];
         this.types = [];
 
-        this.modal = new modal.Modal(this, $container.find('.modal'));
+        this.modal = new modal.Modal($container.find(this.config.modal_selector), this);
 
         this.setupControls();
         this.update();
@@ -41,7 +64,7 @@ export class Gallery {
         var params:any = {};
         params.category = this.category;
         params.types = this.types;
-        $.getJSON(this.api_url, params, (data) => {
+        $.getJSON(this.config.api_url, params, (data) => {
             this.callback(data);
         });
     }
@@ -97,7 +120,7 @@ export class Gallery {
                 return groups;
             }
             return [];
-        })(data.items, this.items_per_page);
+        })(data.items, this.config.items_per_page);
 
         $.each(groups, (group_index, group) => {
             var data = '';
@@ -113,15 +136,18 @@ export class Gallery {
 
         // Setup pagination
         var pagination_click_callback = (e) => {
-            var i = $(this).data('i');
+            var $target = $(e.target);
+            var i = parseInt($target.closest('a').attr('data-i'));
             e.preventDefault();
 
-            $('.state-current', $(this).closest('.pagination')).removeClass('state-current');
-            $(this).parent().addClass('state-current');
+            $(this.$container).find('.state-current').removeClass('state-current');
+            $target.closest('a').parent().addClass('state-current');
 
-            $('.group.state-current', this.$container).removeClass('state-current');
-            $($('.group', this.$container)[i - 1]).addClass('state-current');
+            var group = this.$container.find('.group')[i - 1];
+            $(group).addClass('state-current');
         }
+
+        // Setup content
         var group_elements = this.$container.find('.group');
         $(group_elements[0]).first().addClass('state-current');
         for (var i = 1; i <= group_elements.length; i++) {
@@ -130,7 +156,7 @@ export class Gallery {
             if (i === 1) {
                 $page.addClass('state-current');
             }
-            $page_link.data('i', i);
+            $page_link.attr('data-i', i);
             $page_link.on('click', pagination_click_callback);
             $page.append($page_link);
             this.$pagination.append($page);

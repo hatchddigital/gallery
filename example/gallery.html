@@ -39,15 +39,16 @@
     </script>
 
     <div id="gallery" class="gallery">
-        <div class="groups">
-        </div>
-        <ul class="pagination">
-        </ul>
         <div class="modal">
             <div class="blocking"></div>
             <div class="container">
                 <div class="heading">x of x</div>
-                <div class="content"></div>
+                <div class="content">
+                  <div class="groups">
+                  </div>
+                  <ul class="pagination">
+                  </ul>
+                </div>
                 <a class="close" href="#"></a>
                 <a class="previous" href="#"></a>
                 <a class="next" href="#"></a>
@@ -61,14 +62,15 @@
           paths: {
             'jquery': 'libs/jquery/dist/jquery',
             'handlebars': 'libs/handlebars/handlebars',
-            'gallery': '../dist/gallery'
+            'gallery': '../dist/gallery',
+            'modal': '../dist/modal',
           },
           shim: {
             'handlebars': { exports: 'Handlebars' }
           }
         });
         require(['jquery', 'gallery'], function($, gallery) {
-            var gallery = new gallery.Gallery($('#gallery'));
+            var gallery = new gallery.Gallery($('#gallery'), { api_url: "gallery.json" });
             gallery.modal.show();
         });
     </script>

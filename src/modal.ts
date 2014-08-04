@@ -21,6 +21,7 @@ export class Modal {
     }
 
     init(e:any = null) {
+        console.log("Found: ", this.$el);
         this.$el.find('.close').click((e) => {
             e.preventDefault();
             this.hide();

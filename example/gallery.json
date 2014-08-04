@@ -13,8 +13,8 @@
         "type": "image",
         "youtube_id": "null",
         "image_scales": {
-            "large": "img/a.jpg",
-            "thumb": "img/b.jpg"
+            "large": "img/b.jpg",
+            "thumb": "img/a.jpg"
         },
         "description": "Hello",
         "media_credit": "Credit"
@@ -33,8 +33,8 @@
         "type": "image",
         "youtube_id": "null",
         "image_scales": {
-            "large": "img/a.jpg",
-            "thumb": "img/b.jpg"
+            "large": "img/b.jpg",
+            "thumb": "img/a.jpg"
         },
         "description": "Hello",
         "media_credit": "Credit"
