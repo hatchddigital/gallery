@@ -7,13 +7,18 @@
 	<link rel="stylesheet" href="../dist/modal.css" media="screen" />
 </head>
 <body>
-    <div class="modal target">
-      <div class="blocking"></div>
-      <div class="container" style="width: 50%; height: 50%;">
-          <div class="heading">x of x</div>
-          <div class="content"></div>
-          <a class="close" href="#"></a>
-      </div>
+    <div class="modal">
+        <div class="blocking"></div>
+        <div class="modal-container">
+            <ul class="modal-controls">
+                <li><a href="#" class="close"><span>Close</span></a></li>
+                <li><a data-direction="previous" href="#" class="previous"><span>Prev</span></a></li>
+                <li class="modal-controls-itemcount heading"></li>
+                <li><a data-direction="next" href="#" class="next"><span>Next</span></a></li>
+            </ul>
+            <div class="modal-content">
+           </div>
+        </div>
     </div>
     <div>
       A really long page goes here <br/>
@@ -96,7 +101,7 @@
           }
         });
         require(['jquery', 'modal'], function($, modal) {
-            var m = new modal.Modal($('.target'));
+            var m = new modal.Modal($('.modal'));
             m.setContent('Hello world');
             m.setHeading('Hello heading');
             m.show();

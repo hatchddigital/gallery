@@ -17,26 +17,26 @@ Code: http://github.com/hatchddigital/hatchling.slide
 ......MMM... MM....:MMMMM:MM....ZMMMMM....MMMMMM7...MM....MMM.... MMMMMMD......
 
 */
-.filter--category a.state-active,
-.filter--types a.state-active {
+.filter--category a.state--active,
+.filter--types a.state--active {
   font-weight: bold; }
 
 .gallery {
   clear: both; }
 
-.gallery .groups {
+.gallery .gallery-groups {
   border: 1px solid blue; }
 
-.gallery .groups .group {
+.gallery .gallery-groups .gallery-group {
   border: 1px solid red;
   width: 25%;
   float: left;
   display: none; }
 
-.gallery .groups .group.state-current {
+.gallery .gallery-groups .gallery-group.state--current {
   display: block; }
 
-.gallery .groups .gallery-item .gallery-item-full {
+.gallery .gallery-groups .gallery-item .gallery-item-full {
   display: none; }
 
 .gallery .pagination {
@@ -45,7 +45,7 @@ Code: http://github.com/hatchddigital/hatchling.slide
 .gallery .pagination li {
   display: inline; }
 
-.gallery .pagination li.state-current {
+.gallery .pagination li.state--current {
   font-weight: bold; }
 
 .modal {
@@ -75,7 +75,7 @@ Code: http://github.com/hatchddigital/hatchling.slide
   background: #fff;
   z-index: 2; }
 
-.modal.state-active {
+.modal.state--active {
   display: block; }
 
 .modal .heading {

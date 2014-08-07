@@ -20,10 +20,6 @@ export class Modal {
             e.preventDefault();
             this.close();
         });
-        this.$el.find('.blocking').click((e) => {
-            e.preventDefault();
-            this.close();
-        });
         if (this.gallery) {
             this.$el.find('.next, .previous').click((e) => {
                 var direction = $(e.target).data('direction');
@@ -37,15 +33,15 @@ export class Modal {
     }
 
     show(e:any = null) {
-        this.$el.addClass('state-active');
+        this.$el.addClass('state--active');
     }
 
     close(e:any = null) {
-        this.$el.removeClass('state-active');
+        this.$el.removeClass('state--active');
     }
 
     setContent(content, hasPrev, hasNext) {
-        this.$el.find('.content').html(content);
+        this.$el.find('.modal-content').html(content);
 
         if (hasPrev) {
             this.$el.find('.previous').show();

@@ -25,7 +25,7 @@ Code: http://github.com/hatchddigital/hatchling.slide
   left: 0;
   display: none;
   z-index: 100; }
-  .modal.state-active {
+  .modal.state--active {
     display: block; }
   .modal .blocking {
     background: red;
@@ -36,7 +36,7 @@ Code: http://github.com/hatchddigital/hatchling.slide
     position: fixed;
     top: 0px;
     left: 0px; }
-  .modal .container {
+  .modal .modal-container {
     width: 800px;
     height: 800px;
     border: 1px solid green;

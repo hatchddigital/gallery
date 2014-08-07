@@ -47,7 +47,7 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
         Gallery.prototype.callback = function (data) {
             var _this = this;
             // Cleanup
-            $('.groups', this.$container).empty();
+            $('.gallery-groups', this.$container).empty();
             this.$pagination.empty();
 
             // Append our new items
@@ -74,53 +74,81 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
                 });
 
                 var group_html = _this.compiled_group_template({ 'data': data });
-                $('.groups', _this.$container).append(group_html);
+                _this.$container.find('.gallery-groups').append(group_html);
             });
 
+            this.setupPagination();
+        };
+
+        Gallery.prototype.setupPagination = function () {
+            var _this = this;
             // Setup pagination
             var pagination_click_callback = function (e) {
                 var $pageEl = $(e.currentTarget);
                 var i = $pageEl.data('i');
                 e.preventDefault();
 
-                $('.state-current', $pageEl.closest('.pagination')).removeClass('state-current');
-                $pageEl.parent().addClass('state-current');
+                $('.state--current', $pageEl.closest('.pagination')).removeClass('state--current');
+                $pageEl.parent().addClass('state--current');
 
-                $('.group.state-current', _this.$container).removeClass('state-current');
-                $($('.group', _this.$container)[i - 1]).addClass('state-current');
-            };
-            var group_elements = this.$container.find('.group');
-            $(group_elements[0]).first().addClass('state-current');
-            for (var i = 1; i <= group_elements.length; i++) {
-                var $page = $('<li>');
-                var $page_link = $('<a href="#"><span class="visual-hide">Page </span>' + i + '</a>');
+                $('.gallery-group.state--current', _this.$container).removeClass('state--current');
+                $($('.gallery-group', _this.$container)[i - 1]).addClass('state--current');
+
+                _this.$pagination.find('.pagination-control--prev, .pagination-control--next').removeClass('inactive');
                 if (i === 1) {
-                    $page.addClass('state-current');
+                    _this.$pagination.find('.pagination-control--prev').addClass('inactive');
                 }
+                if (i === _this.$pagination.find('.pagination-control--pages a').length) {
+                    _this.$pagination.find('.pagination-control--next').addClass('inactive');
+                }
+            };
+            var group_elements = this.$container.find('.gallery-group');
+            var $pagination_controls = $('<ul class="pagination-controls" />');
+            var $pagination_control_pages = $('<ul class="pagination-controls pagination-control--pages" />');
+
+            if (group_elements.length > 1) {
+                $pagination_controls.append('<li class="pagination-control pagination-control--prev"><a href="#">Previous</a></li>');
+            }
+            $pagination_controls.append($pagination_control_pages);
+            if (group_elements.length > 1) {
+                $pagination_controls.append('<li class="pagination-control pagination-control--next"><a href="#">Next</a></li>');
+            }
+
+            $pagination_controls.find('.pagination-control a').on('click', function (e) {
+                e.preventDefault();
+                var $el = $(e.currentTarget);
+                if ($el.parent().hasClass('pagination-control--prev')) {
+                    _this.setPage(_this.getCurrentPageNumber() - 1);
+                }
+                if ($el.parent().hasClass('pagination-control--next')) {
+                    _this.setPage(_this.getCurrentPageNumber() + 1);
+                }
+            });
+
+            for (var i = 1; i <= group_elements.length; i++) {
+                var $page = $('<li class="pagination-control">');
+                var $page_link = $('<a href="#">Page ' + i + '</a>');
                 $page_link.attr('data-i', i);
                 $page_link.on('click', pagination_click_callback);
                 $page.append($page_link);
-                this.$pagination.append($page);
+                $pagination_control_pages.append($page);
             }
+            this.$pagination.append($pagination_controls);
 
+            this.setPage(1);
             this.handleExpand();
         };
 
         Gallery.prototype.setPage = function (i) {
-            console.log('set page to ' + i);
-            this.$pagination.find('a')[i - 1].click();
+            this.$pagination.find('.pagination-control--pages a')[i - 1].click();
         };
 
         Gallery.prototype.getPageGroup = function (i) {
-            return this.$container.find('.group')[i - 1];
+            return this.$container.find('.gallery-group')[i - 1];
         };
 
         Gallery.prototype.getCurrentPageNumber = function () {
-            return parseInt(this.$pagination.find('.state-current a').data('i'), 10);
-        };
-
-        Gallery.prototype.getTotalPages = function () {
-            return this.$pagination.find('.state-current a').data('i');
+            return parseInt(this.$pagination.find('.state--current a').data('i'), 10);
         };
 
         Gallery.prototype.handleExpand = function () {
@@ -146,7 +174,7 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
             var $item = $el.next('.gallery-item');
             var currentPageNumber = this.getCurrentPageNumber();
             if (!$item.length) {
-                if (currentPageNumber < this.$container.find('.group').length) {
+                if (currentPageNumber < this.$container.find('.gallery-group').length) {
                     $item = $(this.getPageGroup(currentPageNumber + 1)).find('.gallery-item:first');
                 }
             }
@@ -159,10 +187,6 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
             var $content = $el.find('.gallery-item-full').clone();
             var currentPageNumber = this.getCurrentPageNumber();
 
-            console.log($el);
-            console.log(currentPageNumber);
-            console.log($el.data('page'));
-
             // If the current page is not that of the element's, switch to that page
             if (currentPageNumber !== $el.data('page')) {
                 this.setPage($el.data('page'));
@@ -173,24 +197,24 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
             hasNext = this.findNextItem($el).length > 0;
 
             // Set the active gallery item
-            this.$container.find('.gallery-item.state-active').removeClass('state-active');
-            $el.addClass('state-active');
+            this.$container.find('.gallery-item.state--active').removeClass('state--active');
+            $el.addClass('state--active');
 
             // Swap out the enlarged media
             if (!$el.data('youtube-id')) {
-                $content.find('.expanded-media').append('<img src="' + $el.data('image-large') + '" alt="' + $el.find('.expand img').attr('alt') + '">');
+                $content.find('.modal-media .modal-media-src').append('<img src="' + $el.data('image-large') + '" alt="' + $el.find('.expand img').attr('alt') + '">');
             } else {
-                $content.find('.expanded-media').append('<iframe width="100%" height="400" src="//www.youtube.com/embed/' + $el.data('youtube-id') + '" frameborder="0" allowfullscreen="allowfullscreen"></iframe>');
+                $content.find('.modal-media .modal-media-src').append('<iframe width="100%" height="400" src="//www.youtube.com/embed/' + $el.data('youtube-id') + '" frameborder="0" allowfullscreen="allowfullscreen"></iframe>');
             }
 
             // Update the modal dialog
-            this.modal.setContent($content, hasPrev, hasNext);
+            this.modal.setContent($content.html(), hasPrev, hasNext);
             this.modal.setHeading($el.data('item-index') + ' of ' + this.$container.find('.gallery-item').length);
             this.modal.show();
         };
 
         Gallery.prototype.handleNextPrev = function (direction) {
-            var $activeEl = this.$container.find('.gallery-item.state-active');
+            var $activeEl = this.$container.find('.gallery-item.state--active');
 
             if (direction === 'next') {
                 this.setActive(this.findNextItem($activeEl));

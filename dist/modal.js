@@ -13,10 +13,6 @@ define(["require", "exports", 'jquery'], function(require, exports, $) {
                 e.preventDefault();
                 _this.close();
             });
-            this.$el.find('.blocking').click(function (e) {
-                e.preventDefault();
-                _this.close();
-            });
             if (this.gallery) {
                 this.$el.find('.next, .previous').click(function (e) {
                     var direction = $(e.target).data('direction');
@@ -24,22 +20,22 @@ define(["require", "exports", 'jquery'], function(require, exports, $) {
                     _this.gallery.handleNextPrev(direction);
                 });
             } else {
-                this.$el.find('.next, .previous').remove();
+                this.$el.find('.next, .previous').hide();
             }
         };
 
         Modal.prototype.show = function (e) {
             if (typeof e === "undefined") { e = null; }
-            this.$el.addClass('state-active');
+            this.$el.addClass('state--active');
         };
 
         Modal.prototype.close = function (e) {
             if (typeof e === "undefined") { e = null; }
-            this.$el.removeClass('state-active');
+            this.$el.removeClass('state--active');
         };
 
         Modal.prototype.setContent = function (content, hasPrev, hasNext) {
-            this.$el.find('.content').html(content);
+            this.$el.find('.modal-content').html(content);
 
             if (hasPrev) {
                 this.$el.find('.previous').show();

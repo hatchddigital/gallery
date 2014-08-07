@@ -27,7 +27,7 @@ Code: http://github.com/hatchddigital/hatchling.slide
   display: none;
   z-index: 100;
 
-  &.state-active {
+  &.state--active {
     display: block;
   }
 
@@ -42,7 +42,7 @@ Code: http://github.com/hatchddigital/hatchling.slide
     left: 0px;
   }
 
-  .container {
+  .modal-container {
     width: 800px;
     height: 800px;
     border: 1px solid green;

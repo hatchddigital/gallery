@@ -12,7 +12,7 @@
     </h1>
 
     <script id="gallery-group-template" type="text/x-handlebars-template">
-        <ul class="group">
+        <ul class="gallery-group">
             {{{data}}}
         </ul>
     </script>
@@ -28,30 +28,30 @@
                 <img src="{{image_scales.thumb}}" alt="{{image_alt}}" />
             </a>
             <div class="gallery-item-full">
-                <div class="description">
-                    <div class="expanded-media"></div>
-                    <p>
-                        {{description}}
-                    </p>
-                    <p>Credit: {{media_credit}}</p>
-                </div>
+                <figure class="modal-media">
+                    <div class="modal-media-src"></div>
+                    <figcaption class="modal-media-caption">{{description}} Credit: {{media_credit}}</figcaption>
+                </figure>
             </div>
         </li>
     </script>
 
-    <div id="gallery" class="gallery">
-        <div class="groups">
+    <div class="gallery">
+        <div class="gallery-groups">
         </div>
-        <ul class="pagination">
-        </ul>
+        <div class="pagination">
+        </div>
         <div class="modal">
             <div class="blocking"></div>
-            <div class="container">
-                <div class="heading">x of x</div>
-                <div class="content"></div>
-                <a class="close" href="#"></a>
-                <a class="previous" data-direction="previous" href="#"></a>
-                <a class="next" data-direction="next" href="#"></a>
+            <div class="modal-container">
+                <ul class="modal-controls">
+                    <li><a href="#" class="close"><span>Close</span></a></li>
+                    <li><a data-direction="previous" href="#" class="previous"><span>Prev</span></a></li>
+                    <li class="modal-controls-itemcount heading"></li>
+                    <li><a data-direction="next" href="#" class="next"><span>Next</span></a></li>
+                </ul>
+                <div class="modal-content">
+               </div>
             </div>
         </div>
     </div>
@@ -123,7 +123,7 @@
         ]}
 
         require(['jquery', 'gallery'], function($, gallery) {
-            var gallery = new gallery.Gallery($('#gallery'), {data: data});
+            var gallery = new gallery.Gallery($('.gallery'), { data: data });
         });
     </script>
 </body>
