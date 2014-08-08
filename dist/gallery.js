@@ -8,7 +8,7 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
             this.api_url = settings.api_url || window.location.pathname + '/gallery.json';
             this.data = settings.data || null;
             this.api_params = {};
-            this.items_per_page = parseInt(settings.items_per_page || 2, 10);
+            this.items_per_page = parseInt(settings.items_per_page || 12, 10);
 
             var item_template = settings.item_template || '#gallery-item-template';
             var group_template = settings.group_template || '#gallery-group-template';
