@@ -221,6 +221,9 @@ export class Gallery {
         }
         else {
             $content.find('.modal-media .modal-media-src').append('<iframe width="100%" height="400" src="//www.youtube.com/embed/' + $el.data('youtube-id') + '" frameborder="0" allowfullscreen="allowfullscreen"></iframe>');
+            if ($.fn.fitVids) {
+                $content.find('.modal-media .modal-media-src').fitVids();
+            }
         }
 
         // Update the modal dialog
