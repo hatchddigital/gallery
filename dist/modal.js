@@ -15,7 +15,7 @@ define(["require", "exports", 'jquery'], function(require, exports, $) {
             });
             if (this.gallery) {
                 this.$el.find('.next, .previous').click(function (e) {
-                    var direction = $(e.target).data('direction');
+                    var direction = $(e.currentTarget).data('direction');
                     e.preventDefault();
                     _this.gallery.handleNextPrev(direction);
                 });

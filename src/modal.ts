@@ -22,7 +22,7 @@ export class Modal {
         });
         if (this.gallery) {
             this.$el.find('.next, .previous').click((e) => {
-                var direction = $(e.target).data('direction');
+                var direction = $(e.currentTarget).data('direction');
                 e.preventDefault();
                 this.gallery.handleNextPrev(direction);
             });
