@@ -12,7 +12,7 @@ export class Gallery {
     items_per_page:number;
     compiled_item_template:any;
     compiled_group_template:any;
-    $pagination:any;3
+    $pagination:any;
     $container:any;
     category:any[];
     types:any[];
