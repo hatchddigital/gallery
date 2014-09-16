@@ -127,7 +127,7 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
 
             for (var i = 1; i <= group_elements.length; i++) {
                 var $page = $('<li class="pagination-control">');
-                var $page_link = $('<a href="#">Page ' + i + '</a>');
+                var $page_link = $('<a href="#"><span class="visual-hide">Page </span>' + i + '</a>');
                 $page_link.attr('data-i', i);
                 $page_link.on('click', pagination_click_callback);
                 $page.append($page_link);
@@ -137,6 +137,13 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
 
             this.setPage(1);
             this.handleExpand();
+
+            // Only show pagination if there is more than 1 page
+            if (group_elements.length > 1) {
+                this.$pagination.show();
+            } else {
+                this.$pagination.hide();
+            }
         };
 
         Gallery.prototype.setPage = function (i) {
