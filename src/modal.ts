@@ -34,10 +34,12 @@ export class Modal {
 
     show(e:any = null) {
         this.$el.addClass('state--active');
+        $('body').addClass('modal--active');
     }
 
     close(e:any = null) {
         this.$el.removeClass('state--active');
+        $('body').removeClass('modal--active');
     }
 
     setContent(content, hasPrev, hasNext) {

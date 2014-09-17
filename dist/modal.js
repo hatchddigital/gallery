@@ -27,11 +27,13 @@ define(["require", "exports", 'jquery'], function(require, exports, $) {
         Modal.prototype.show = function (e) {
             if (typeof e === "undefined") { e = null; }
             this.$el.addClass('state--active');
+            $('body').addClass('modal--active');
         };
 
         Modal.prototype.close = function (e) {
             if (typeof e === "undefined") { e = null; }
             this.$el.removeClass('state--active');
+            $('body').removeClass('modal--active');
         };
 
         Modal.prototype.setContent = function (content, hasPrev, hasNext) {
