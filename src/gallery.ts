@@ -38,7 +38,8 @@ export class Gallery {
         this.category = [];
         this.types = [];
 
-        this.modal = new modal.Modal($container.find('.modal'), this);
+        var $modal = $container.find('.modal');
+        this.modal = new modal.Modal($modal.clone().appendTo($('body')), this);
         this.beforeInit();
         this.update();
         this.afterInit();
