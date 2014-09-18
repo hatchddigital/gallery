@@ -34,6 +34,9 @@ define(["require", "exports", 'jquery'], function(require, exports, $) {
             if (typeof e === "undefined") { e = null; }
             this.$el.removeClass('state--active');
             $('body').removeClass('modal--active');
+
+            // Empty the contents of the modal so youtube videos stop playing
+            this.$el.find('.modal-content').empty();
         };
 
         Modal.prototype.setContent = function (content, hasPrev, hasNext) {
