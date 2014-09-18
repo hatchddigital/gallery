@@ -5,6 +5,8 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
             this.$container = $container;
             this.$pagination = $container.find('.pagination');
 
+            this.modal_open_callback = settings.modal_open_callback || null;
+
             this.api_url = settings.api_url || window.location.pathname + '/gallery.json';
             this.data = settings.data || null;
             this.api_params = {};
@@ -222,6 +224,9 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
             this.modal.setContent($content.html(), hasPrev, hasNext);
             this.modal.setHeading($el.data('item-index') + ' of ' + this.$container.find('.gallery-item').length);
             this.modal.show();
+            if (this.modal_open_callback !== null) {
+                this.modal_open_callback();
+            }
         };
 
         Gallery.prototype.handleNextPrev = function (direction) {

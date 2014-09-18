@@ -10,6 +10,7 @@ export class Gallery {
     api_params:any;
     data:any[];
     items_per_page:number;
+    modal_open_callback:any;
     compiled_item_template:any;
     compiled_group_template:any;
     $pagination:any;
@@ -21,6 +22,8 @@ export class Gallery {
     constructor($container, settings:any = {}) {
         this.$container = $container;
         this.$pagination = $container.find('.pagination');
+
+        this.modal_open_callback = settings.modal_open_callback || null;
 
         this.api_url = settings.api_url || window.location.pathname + '/gallery.json';
         this.data = settings.data || null;
@@ -239,6 +242,9 @@ export class Gallery {
         this.modal.setContent($content.html(), hasPrev, hasNext);
         this.modal.setHeading($el.data('item-index') + ' of ' + this.$container.find('.gallery-item').length);
         this.modal.show();
+        if (this.modal_open_callback !== null) {
+            this.modal_open_callback();
+        }
     }
 
     handleNextPrev(direction) {
