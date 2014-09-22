@@ -168,7 +168,7 @@ export class Gallery {
     }
 
     setPage(i) {
-        this.$pagination.find('.pagination-control--pages a')[i - 1].click();
+        $(this.$pagination.find('.pagination-control--pages a')[i - 1]).click();
     }
 
     getPageGroup(i) {

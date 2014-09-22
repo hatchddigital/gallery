@@ -150,7 +150,7 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
         };
 
         Gallery.prototype.setPage = function (i) {
-            this.$pagination.find('.pagination-control--pages a')[i - 1].click();
+            $(this.$pagination.find('.pagination-control--pages a')[i - 1]).click();
         };
 
         Gallery.prototype.getPageGroup = function (i) {
