@@ -232,7 +232,7 @@ export class Gallery {
             $content.find('.modal-media .modal-media-src').append('<img src="' + $el.data('image-large') + '" alt="' + $el.find('.expand img').attr('alt') + '">');
         }
         else {
-            $content.find('.modal-media .modal-media-src').append('<iframe width="560" height="315" src="//www.youtube.com/embed/' + $el.data('youtube-id') + '" frameborder="0" allowfullscreen="allowfullscreen"></iframe>');
+            $content.find('.modal-media .modal-media-src').append('<iframe width="560" height="315" src="//www.youtube.com/embed/' + $el.data('youtube-id') + '?rel=0" frameborder="0" allowfullscreen="allowfullscreen"></iframe>');
             if ($.fn.fitVids) {
                 $content.find('.modal-media .modal-media-src').fitVids();
             }
