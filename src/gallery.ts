@@ -160,10 +160,10 @@ export class Gallery {
 
         // Only show pagination if there is more than 1 page
         if (group_elements.length > 1) {
-            this.$pagination.show();
+            this.$pagination.removeClass('state--hidden');
         }
         else {
-            this.$pagination.hide();
+            this.$pagination.addClass('state--hidden');
         }
     }
 

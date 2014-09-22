@@ -28,7 +28,7 @@ export class Modal {
             });
         }
         else {
-            this.$el.find('.next, .previous').hide();
+            this.$el.find('.next, .previous').addClass('state--hidden');
         }
     }
 
@@ -48,17 +48,17 @@ export class Modal {
         this.$el.find('.modal-content').html(content);
 
         if (hasPrev) {
-            this.$el.find('.previous').show();
+            this.$el.find('.previous').removeClass('state--hidden');
         }
         else {
-            this.$el.find('.previous').hide();
+            this.$el.find('.previous').addClass('state--hidden');
         }
 
         if (hasNext) {
-            this.$el.find('.next').show();
+            this.$el.find('.next').removeClass('state--hidden');
         }
         else {
-            this.$el.find('.next').hide();
+            this.$el.find('.next').addClass('state--hidden');
         }
     }
 
