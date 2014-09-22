@@ -20,7 +20,7 @@ define(["require", "exports", 'jquery'], function(require, exports, $) {
                     _this.gallery.handleNextPrev(direction);
                 });
             } else {
-                this.$el.find('.next, .previous').hide();
+                this.$el.find('.next, .previous').addClass('state--hidden');
             }
         };
 
@@ -43,15 +43,15 @@ define(["require", "exports", 'jquery'], function(require, exports, $) {
             this.$el.find('.modal-content').html(content);
 
             if (hasPrev) {
-                this.$el.find('.previous').show();
+                this.$el.find('.previous').removeClass('state--hidden');
             } else {
-                this.$el.find('.previous').hide();
+                this.$el.find('.previous').addClass('state--hidden');
             }
 
             if (hasNext) {
-                this.$el.find('.next').show();
+                this.$el.find('.next').removeClass('state--hidden');
             } else {
-                this.$el.find('.next').hide();
+                this.$el.find('.next').addClass('state--hidden');
             }
         };
 
