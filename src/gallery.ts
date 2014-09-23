@@ -20,6 +20,10 @@ export class Gallery {
     modal:modal.Modal;
 
     constructor($container, settings:any = {}) {
+        handlebars.registerHelper('json', function(context) {
+            return JSON.stringify(context);
+        });
+
         this.$container = $container;
         this.$pagination = $container.find('.pagination');
 
@@ -229,14 +233,14 @@ export class Gallery {
 
         // Swap out the enlarged media
         if (!$el.data('youtube-id')) {
-            $content.find('.modal-media .modal-media-src').append('<img src="' + $el.data('image-large') + '" alt="' + $el.find('.expand img').attr('alt') + '">');
-        }
-        else {
+            $content.find('.modal-media .modal-media-src').append($('<img />').attr($el.data('image-large')));
+        } else {
             $content.find('.modal-media .modal-media-src').append('<iframe width="560" height="315" src="//www.youtube.com/embed/' + $el.data('youtube-id') + '?rel=0" frameborder="0" allowfullscreen="allowfullscreen"></iframe>');
             if ($.fn.fitVids) {
                 $content.find('.modal-media .modal-media-src').fitVids();
             }
         }
+
 
         // Update the modal dialog
         this.modal.setContent($content.html(), hasPrev, hasNext);

@@ -2,6 +2,10 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
     var Gallery = (function () {
         function Gallery($container, settings) {
             if (typeof settings === "undefined") { settings = {}; }
+            handlebars.registerHelper('json', function (context) {
+                return JSON.stringify(context);
+            });
+
             this.$container = $container;
             this.$pagination = $container.find('.pagination');
 
@@ -212,7 +216,7 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
 
             // Swap out the enlarged media
             if (!$el.data('youtube-id')) {
-                $content.find('.modal-media .modal-media-src').append('<img src="' + $el.data('image-large') + '" alt="' + $el.find('.expand img').attr('alt') + '">');
+                $content.find('.modal-media .modal-media-src').append($('<img />').attr($el.data('image-large')));
             } else {
                 $content.find('.modal-media .modal-media-src').append('<iframe width="560" height="315" src="//www.youtube.com/embed/' + $el.data('youtube-id') + '?rel=0" frameborder="0" allowfullscreen="allowfullscreen"></iframe>');
                 if ($.fn.fitVids) {
