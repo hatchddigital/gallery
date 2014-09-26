@@ -60,6 +60,13 @@ export class Modal {
         else {
             this.$el.find('.next').addClass('state--hidden');
         }
+
+        // Adjust the max width of the containing element so all the buttons line up
+        var max_width = parseInt(this.$el.find('.modal-media-src img').attr('width'), 10);
+        if (!max_width) {
+            max_width = 1000;
+        }
+        this.$el.find('.modal-container').css('max-width', max_width);
     }
 
     setHeading(heading) {
