@@ -196,7 +196,7 @@ export class Gallery {
      *
      * @param int i active page.
      */
-    processViewablePageLinks = function(i) {
+    processViewablePageLinks(i) {
         var min = 1;
         var max = this.$pagination.find('a[data-i]').length - 1;
 

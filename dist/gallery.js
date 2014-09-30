@@ -2,41 +2,6 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
     var Gallery = (function () {
         function Gallery($container, settings) {
             if (typeof settings === "undefined") { settings = {}; }
-            /**
-            * Processes which page numbered links should appear.
-            *
-            * if prev_count or next_count are set then it only shows this amount
-            * before or after the active page
-            *
-            * eg
-            * prev_count = 2
-            * next_count = 4
-            * active page = 10
-            *
-            * <prev>  8 9 <10> 11 12 13 14 <next>
-            *
-            * @param int i active page.
-            */
-            this.processViewablePageLinks = function (i) {
-                var min = 1;
-                var max = this.$pagination.find('a[data-i]').length - 1;
-
-                if (this.prev_count) {
-                    min = i - this.prev_count;
-                }
-                if (this.next_count) {
-                    max = i + this.next_count;
-                }
-
-                this.$pagination.find('a[data-i]').each(function (k, el) {
-                    var i = $(el).data('i');
-                    if (i < min || i > max) {
-                        $(el).parent().hide();
-                    } else {
-                        $(el).parent().show();
-                    }
-                });
-            };
             handlebars.registerHelper('json', function (context) {
                 return JSON.stringify(context);
             });
@@ -194,6 +159,42 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function(requi
 
         Gallery.prototype.setPage = function (i) {
             $(this.$pagination.find('.pagination-control--pages a')[i - 1]).click();
+        };
+
+        /**
+        * Processes which page numbered links should appear.
+        *
+        * if prev_count or next_count are set then it only shows this amount
+        * before or after the active page
+        *
+        * eg
+        * prev_count = 2
+        * next_count = 4
+        * active page = 10
+        *
+        * <prev>  8 9 <10> 11 12 13 14 <next>
+        *
+        * @param int i active page.
+        */
+        Gallery.prototype.processViewablePageLinks = function (i) {
+            var min = 1;
+            var max = this.$pagination.find('a[data-i]').length - 1;
+
+            if (this.prev_count) {
+                min = i - this.prev_count;
+            }
+            if (this.next_count) {
+                max = i + this.next_count;
+            }
+
+            this.$pagination.find('a[data-i]').each(function (k, el) {
+                var i = $(el).data('i');
+                if (i < min || i > max) {
+                    $(el).parent().hide();
+                } else {
+                    $(el).parent().show();
+                }
+            });
         };
 
         Gallery.prototype.getPageGroup = function (i) {
