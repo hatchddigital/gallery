@@ -10,6 +10,8 @@ export class Gallery {
     api_params:any;
     data:any[];
     items_per_page:number;
+    prev_count:number;
+    next_count:number;
     modal_open_callback:any;
     compiled_item_template:any;
     compiled_group_template:any;
@@ -33,6 +35,8 @@ export class Gallery {
         this.data = settings.data || null;
         this.api_params = {};
         this.items_per_page = parseInt(settings.items_per_page || 12, 10);
+        this.prev_count = parseInt(settings.prev_count, 10) || null;
+        this.next_count = parseInt(settings.next_count, 10) || null;
 
         var item_template = settings.item_template || '#gallery-item-template';
         var group_template = settings.group_template || '#gallery-group-template';
@@ -125,6 +129,8 @@ export class Gallery {
             if (i === this.$pagination.find('.pagination-control--pages a').length) {
                 this.$pagination.find('.pagination-control--next').addClass('inactive');
             }
+
+            this.processViewablePageLinks(i);
         }
         var group_elements = this.$container.find('.gallery-group');
         var $pagination_controls = $('<ul class="pagination-controls" />');
@@ -173,6 +179,43 @@ export class Gallery {
 
     setPage(i) {
         $(this.$pagination.find('.pagination-control--pages a')[i - 1]).click();
+    }
+
+    /**
+     * Processes which page numbered links should appear.
+     *
+     * if prev_count or next_count are set then it only shows this amount
+     * before or after the active page
+     *
+     * eg
+     * prev_count = 2
+     * next_count = 4
+     * active page = 10
+     *
+     * <prev>  8 9 <10> 11 12 13 14 <next>
+     *
+     * @param int i active page.
+     */
+    processViewablePageLinks = function(i) {
+        var min = 1;
+        var max = this.$pagination.find('a[data-i]').length - 1;
+
+        if (this.prev_count) {
+            min = i - this.prev_count;
+        }
+        if (this.next_count) {
+            max = i + this.next_count;
+        }
+
+        this.$pagination.find('a[data-i]').each(function(k, el) {
+            var i = $(el).data('i');
+            if (i < min || i > max) {
+                $(el).parent().hide();
+            }
+            else {
+                $(el).parent().show();
+            }
+        });
     }
 
     getPageGroup(i) {
