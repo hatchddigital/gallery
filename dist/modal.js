@@ -59,7 +59,12 @@ define(["require", "exports", 'jquery'], function(require, exports, $) {
             if (!max_width) {
                 max_width = 1000;
             }
-            this.$el.find('.modal-container').css('max-width', max_width);
+
+            // For videos, calculator the max width based of taking up half the height in a 5/3 ratio
+            // 400p
+            max_width = Math.min(max_width, ($(window).height() - 400 / 2) * (5 / 3));
+            this.$el.find('.modal-container .modal-media-src').css('max-width', max_width);
+            this.$el.find('.modal-container').css('max-width', Math.max(500, max_width));
         };
 
         Modal.prototype.setHeading = function (heading) {
