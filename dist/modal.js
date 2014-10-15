@@ -65,6 +65,9 @@ define(["require", "exports", 'jquery'], function(require, exports, $) {
             max_width = Math.min(max_width, ($(window).height() - 400 / 2) * (5 / 3));
             this.$el.find('.modal-container .modal-media-src').css('max-width', max_width);
             this.$el.find('.modal-container').css('max-width', Math.max(500, max_width));
+
+            // Set the height so that we dont get vertical images pushing out of the screen.
+            this.$el.find('.modal-container .modal-media-src > img').css('max-height', $(window).height() * 0.7);
         };
 
         Modal.prototype.setHeading = function (heading) {
