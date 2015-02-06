@@ -3,3 +3,5 @@
 node_modules
 libs
 build
+src/defs
+*.map
