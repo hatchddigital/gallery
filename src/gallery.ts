@@ -214,7 +214,7 @@ export class Gallery {
 
         this.$pagination.find('a[data-i]').each(function(k, el) {
             var i = $(el).data('i');
-            if (i < min || i > max) {
+            if (i < min || i > (max + 1)) { // data-i is base 1, not base 0
                 $(el).parent().hide();
             }
             else {

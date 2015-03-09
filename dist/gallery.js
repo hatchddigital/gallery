@@ -168,7 +168,7 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function (requ
             }
             this.$pagination.find('a[data-i]').each(function (k, el) {
                 var i = $(el).data('i');
-                if (i < min || i > max) {
+                if (i < min || i > (max + 1)) {
                     $(el).parent().hide();
                 }
                 else {
