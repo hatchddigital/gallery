@@ -12,6 +12,7 @@ export class Gallery {
     items_per_page:number;
     prev_count:number;
     next_count:number;
+    pagination_callback:any;
     modal_open_callback:any;
     compiled_item_template:any;
     compiled_group_template:any;
@@ -33,6 +34,7 @@ export class Gallery {
 
         this.api_url = settings.api_url || window.location.pathname + '/gallery.json';
         this.data = settings.data || null;
+        this.pagination_callback = settings.pagination_callback || null;
         this.api_params = {};
         this.items_per_page = parseInt(settings.items_per_page || 12, 10);
         this.prev_count = parseInt(settings.prev_count, 10) || null;
@@ -131,6 +133,9 @@ export class Gallery {
             }
 
             this.processViewablePageLinks(i);
+            if (this.pagination_callback) {
+                this.pagination_callback(this);
+            }
         }
         var group_elements = this.$container.find('.gallery-group');
         var $pagination_controls = $('<ul class="pagination-controls" />');
@@ -291,6 +296,9 @@ export class Gallery {
         this.modal.show();
         if (this.modal_open_callback !== null) {
             this.modal_open_callback();
+        }
+        if (this.pagination_callback) {
+            this.pagination_callback(this);
         }
     }
 

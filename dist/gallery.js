@@ -10,6 +10,7 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function (requ
             this.modal_open_callback = settings.modal_open_callback || null;
             this.api_url = settings.api_url || window.location.pathname + '/gallery.json';
             this.data = settings.data || null;
+            this.pagination_callback = settings.pagination_callback || null;
             this.api_params = {};
             this.items_per_page = parseInt(settings.items_per_page || 12, 10);
             this.prev_count = parseInt(settings.prev_count, 10) || null;
@@ -95,6 +96,9 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function (requ
                     _this.$pagination.find('.pagination-control--next').addClass('inactive');
                 }
                 _this.processViewablePageLinks(i);
+                if (_this.pagination_callback) {
+                    _this.pagination_callback(_this);
+                }
             };
             var group_elements = this.$container.find('.gallery-group');
             var $pagination_controls = $('<ul class="pagination-controls" />');
@@ -236,6 +240,9 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function (requ
             this.modal.show();
             if (this.modal_open_callback !== null) {
                 this.modal_open_callback();
+            }
+            if (this.pagination_callback) {
+                this.pagination_callback(this);
             }
         };
         Gallery.prototype.handleNextPrev = function (direction) {
