@@ -77,8 +77,9 @@ export class Gallery {
     }
 
     callback(data) {
+
         // Cleanup
-        $('.gallery-groups', this.$container).empty();
+        this.$container.find('.gallery-groups').html('');
         this.$pagination.empty();
 
         // Append our new items
