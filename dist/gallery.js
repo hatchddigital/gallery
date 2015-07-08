@@ -27,7 +27,6 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function (requ
             this.modal = new modal.Modal($modal.clone().appendTo($('body')), this);
             this.beforeInit();
             this.update();
-            this.afterInit();
         }
         Gallery.prototype.beforeInit = function () {
             // override
@@ -43,13 +42,17 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function (requ
             else {
                 $.getJSON(this.api_url, this.api_params, function (data) {
                     _this.callback(data);
+                    if (!_this.after_init_fired) {
+                        _this.afterInit();
+                        _this.after_init_fired = true;
+                    }
                 });
             }
         };
         Gallery.prototype.callback = function (data) {
             var _this = this;
             // Cleanup
-            $('.gallery-groups', this.$container).empty();
+            this.$container.find('.gallery-groups').empty();
             this.$pagination.empty();
             // Append our new items
             var groups = (function (items, size) {
