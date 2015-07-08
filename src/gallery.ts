@@ -21,7 +21,7 @@ export class Gallery {
     category:any[];
     types:any[];
     modal:modal.Modal;
-    after_init_fired: boolean;
+    first_load_callback_fired: boolean;
 
     constructor($container, settings:any = {}) {
         handlebars.registerHelper('json', function(context) {
@@ -56,12 +56,16 @@ export class Gallery {
         this.modal = new modal.Modal($modal.clone().appendTo($('body')), this);
         this.beforeInit();
         this.update();
+        this.afterInit();
     }
 
     beforeInit() {
         // override
     }
     afterInit() {
+        // override
+    }
+    afterFirstCompleteLoad() {
         // override
     }
 
@@ -72,11 +76,6 @@ export class Gallery {
         else {
             $.getJSON(this.api_url, this.api_params, (data) => {
                 this.callback(data);
-
-                if (!this.after_init_fired) {
-                    this.afterInit();
-                    this.after_init_fired = true;
-                }
             });
         }
     }
@@ -184,6 +183,11 @@ export class Gallery {
         }
         else {
             this.$pagination.addClass('state--hidden');
+        }
+
+        if (!this.first_load_callback_fired) {
+            this.afterFirstCompleteLoad();
+            this.first_load_callback_fired = true;
         }
     }
 

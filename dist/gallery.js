@@ -27,11 +27,15 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function (requ
             this.modal = new modal.Modal($modal.clone().appendTo($('body')), this);
             this.beforeInit();
             this.update();
+            this.afterInit();
         }
         Gallery.prototype.beforeInit = function () {
             // override
         };
         Gallery.prototype.afterInit = function () {
+            // override
+        };
+        Gallery.prototype.afterFirstCompleteLoad = function () {
             // override
         };
         Gallery.prototype.update = function () {
@@ -42,10 +46,6 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function (requ
             else {
                 $.getJSON(this.api_url, this.api_params, function (data) {
                     _this.callback(data);
-                    if (!_this.after_init_fired) {
-                        _this.afterInit();
-                        _this.after_init_fired = true;
-                    }
                 });
             }
         };
@@ -140,6 +140,10 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function (requ
             }
             else {
                 this.$pagination.addClass('state--hidden');
+            }
+            if (!this.first_load_callback_fired) {
+                this.afterFirstCompleteLoad();
+                this.first_load_callback_fired = true;
             }
         };
         Gallery.prototype.setPage = function (i) {
