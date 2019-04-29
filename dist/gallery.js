@@ -109,7 +109,7 @@ define(["require", "exports", 'jquery', 'handlebars', './modal'], function (requ
             if (group_elements.length > 1) {
                 $pagination_controls.append('<li class="pagination-control pagination-control--prev"><a href="#">Previous</a></li>');
             }
-            $pagination_controls.append($pagination_control_pages);
+            $pagination_controls.append($('<li class="pagination-control" />').append($pagination_control_pages));
             if (group_elements.length > 1) {
                 $pagination_controls.append('<li class="pagination-control pagination-control--next"><a href="#">Next</a></li>');
             }
